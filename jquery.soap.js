@@ -1,6 +1,6 @@
 /*==========================
 jquery.soap.js - https://github.com/doedje/jquery.soap
-version: 1.6.8
+version: 1.6.7
 
 jQuery plugin for communicating with a web service using SOAP.
 
@@ -33,18 +33,19 @@ For information about how to use jQuery.soap, authors, changelog, the latest ver
 Visit: https://github.com/doedje/jquery.soap
 
 Documentation about THIS version is found here:
-https://github.com/doedje/jquery.soap/blob/1.6.8/README.md
+https://github.com/doedje/jquery.soap/blob/1.6.7/README.md
 
 ======================*/
 
-(function(factory) {
-	if(typeof module === 'object' && typeof module.exports === 'object') {
-	  module.exports = factory(require('jquery'));
-	} else {
-	  factory(jQuery);
-	}
-})(function(jQuery) {
-	var $ = jQuery;
+
+
+var SOAPModule = (function (factory) {
+  if(typeof module === "object" && typeof module.exports === "object") {
+    factory(require("jquery"));
+  } else {
+    factory(jQuery);
+  }
+}(function($) {
 	var enableLogging;
 	var globalConfig = { // this setup once, defaults go here
 		appendMethodToURL: true,
@@ -53,8 +54,16 @@ https://github.com/doedje/jquery.soap/blob/1.6.8/README.md
 		noPrefix: false,
 		soap12: false
 	};
-	function soap(options) {
+		
+	$.soap = SOAPFunction;
+
+	if(typeof module === "object" && typeof module.exports === "object") {
+		module.exports = SOAPFunction	
+	}
+
+	function SOAPFunction(options) {
 		var config = {};
+
 		// a configuration call will not have 'data' specified ('params' is used for backwards compatibility)
 		if (options && !options.params && !options.data) {
 			$.extend(globalConfig, options); // update global config
@@ -422,9 +431,8 @@ https://github.com/doedje/jquery.soap/blob/1.6.8/README.md
 			//Node Value
 			if (this.value !== undefined) {
 				if (typeof(this.value) === 'string') {
-				//	encodedValue = this.value.match(/<!\[CDATA\[.*?\]\]>/) ?
-				encodedValue = this.value.match(/<!\[CDATA\[\s\S\]*\]>/) ?
-					this.value :
+					encodedValue = this.value.match(/<!\[CDATA\[.*?\]\]>/) ?
+						this.value :
 						this.value.replace(/[<>&"']/g, function (ch) {
 							return xmlCharMap[ch];
 						});
@@ -672,5 +680,4 @@ https://github.com/doedje/jquery.soap/blob/1.6.8/README.md
 			}
 		}
 	}
-	return $.soap = soap;
-});
+})); 
